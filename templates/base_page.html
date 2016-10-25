@@ -9,7 +9,7 @@
     <!-- Material Design Lite -->   
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_purple-pink.min.css" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css" />
     <link rel="stylesheet" href="/static/css/text-heavy-template.css"> <!-- borrowed from an mdl template -->
     <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
     
@@ -52,16 +52,16 @@
               <i class="material-icons">more_vert</i>
             </button>
             <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="options-menu">
-              <li><a href="/" class="mdl-menu__item">{{ current_user.name }}</a></li>
-              <li><a href="/logout" class="mdl-menu__item">Logout</a></li>
+              <li><a href="" class="mdl-menu__item">{{ current_user.name }}</a></li>
+              <li><a href="/logout" class="mdl-menu__item" onclick="FB.logout()">Logout</a></li>
             </ul>
             {% endif %}
         </div>
       </header>
       <main class="mdl-layout__content">
 	  {% if current_user is not defined %}
-        <div style="margin:0 auto; text-align:center;">
-        <fb:login-button autologoutlink="false" scope="publish_actions"></fb:login-button>
+        <div id="fbButton">
+        <fb:login-button data-size="xlarge" autologoutlink="false" scope="publish_actions"></fb:login-button>
     	</div> 
   	  {% endif %}
 	  </main>

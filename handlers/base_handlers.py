@@ -5,16 +5,15 @@ import os
 import urllib2
 import wsgiref.handlers
 
+from Model import User
+import facebook
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 import jinja2
+import main
 import webapp2
 from webapp2_extras import sessions
-
-from Model import User
-import facebook
-import main
 
 
 FACEBOOK_APP_ID = "1362095630475570" #your own FB app id here
@@ -140,8 +139,5 @@ class HomeHandler(BasePage):
         
 class LogoutHandler(BasePage):
     def get(self):
-        del self.session["user"]
-#         template = main.jinja_env.get_template("templates/logout.html")
-#         user = self.session["user"]
-#         self.response.out.write(template.render({"user": user}))
+        del self.session['user']
         self.redirect(uri="/")

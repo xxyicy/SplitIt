@@ -1,3 +1,8 @@
+#fbButton {
+    margin: 20% auto; 
+    text-align:center;
+}
+
 .container, .mdl-grid {
   width: 95%;
 }
