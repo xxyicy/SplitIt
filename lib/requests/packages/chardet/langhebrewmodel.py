@@ -53,7 +53,7 @@ win1255_CharToOrderMap = (
  12, 19, 13, 26, 18, 27, 21, 17,  7, 10,  5,251,252,128, 96,253,
 )
 
-# Model Table:
+# py Table:
 # total sequences: 100%
 # first 512 sequences: 98.4004%
 # first 1024 sequences: 1.5981%

@@ -72,7 +72,7 @@ win1251BulgarianCharToOrderMap = (
   7,  8,  5, 19, 29, 25, 22, 21, 27, 24, 17, 75, 52,253, 42, 16,  # f0
 )
 
-# Model Table:
+# py Table:
 # total sequences: 100%
 # first 512 sequences: 96.9392%
 # first 1024 sequences:3.0618%

@@ -5,19 +5,20 @@ import os
 import urllib2
 import wsgiref.handlers
 
-from Model import User
-import facebook
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 import jinja2
-import main
 import webapp2
 from webapp2_extras import sessions
 
+import facebook
+import main
+from models import User
 
-FACEBOOK_APP_ID = "1362095630475570" #your own FB app id here
-FACEBOOK_APP_SECRET = "6e9760b0cc49fd736a9b36998aad064e" #your own FB app secret here
+
+FACEBOOK_APP_ID = "1362095630475570"  # your own FB app id here
+FACEBOOK_APP_SECRET = "6e9760b0cc49fd736a9b36998aad064e"  # your own FB app secret here
 INVITATION_TEXT = "I invite you to try my app. It is amazing!"
 
 
@@ -48,7 +49,7 @@ class BasePage(webapp2.RequestHandler):
             # a round-trip to Facebook on every request
             graph = facebook.GraphAPI(cookie["access_token"])
             profile = graph.get_object("me")
-            user = User.query(User.id==cookie["uid"]).get()
+            user = User.query(User.id == cookie["uid"]).get()
             if not user:
                 user = User(id=str(profile["id"]),
                             name=profile["name"],
@@ -60,9 +61,9 @@ class BasePage(webapp2.RequestHandler):
                 user.put()
                 
             self.session["user"] = dict(
-                    id = str(profile["id"]),
+                    id=str(profile["id"]),
                     name=profile["name"],
-                    access_token = cookie["access_token"]
+                    access_token=cookie["access_token"]
                 )
             return self.session.get("user")
         return None
@@ -95,12 +96,12 @@ class BaseAction(webapp2.RequestHandler):
 
 class HomeHandler(BasePage):
     def get(self):
-        self.show_main()
+        self.get_template()
  
     def post(self):
-        self.show_main()
+        self.get_template()
          
-    def show_main(self):
+    def get_template(self):
         template = main.jinja_env.get_template("templates/base_page.html")
         if "user" not in self.session:
             cookie = facebook.get_user_from_cookie(self.request.cookies, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET)
@@ -109,7 +110,7 @@ class HomeHandler(BasePage):
             # a round-trip to Facebook on every request
                 graph = facebook.GraphAPI(cookie["access_token"])
                 profile = graph.get_object("me")
-                user = User.query(User.id==cookie["uid"]).get()
+                user = User.query(User.id == cookie["uid"]).get()
                 if not user:
                     user = User(id=str(profile["id"]),
                                 name=profile["name"],
@@ -121,9 +122,9 @@ class HomeHandler(BasePage):
                     user.put()
                 
                 self.session["user"] = dict(
-                        id = str(profile["id"]),
+                        id=str(profile["id"]),
                         name=profile["name"],
-                        access_token = cookie["access_token"])
+                        access_token=cookie["access_token"])
                 self.redirect(uri="/")
             else:
                 self.response.out.write(template.render({"facebook_app_id": FACEBOOK_APP_ID}))
@@ -141,3 +142,35 @@ class LogoutHandler(BasePage):
     def get(self):
         del self.session['user']
         self.redirect(uri="/")
+        
+class FriendHandler(BasePage):
+    def get(self):
+#         if "user" not in self.session:
+#             raise Exception("Missing user!")
+        self.get_template()
+        
+    def post(self):
+#         if "user" not in self.session:
+#             raise Exception("Missing user!")
+        self.get_template()
+        
+    def get_template(self):
+        template = main.jinja_env.get_template("templates/friends_list.html")
+        self.response.out.write(template.render())
+        
+class ProfileHandler(BasePage):
+    def get(self):
+#         if "user" not in self.session:
+#             raise Exception("Missing user!")
+        self.get_template()
+        
+    def post(self):
+#         if "user" not in self.session:
+#             raise Exception("Missing user!")
+        self.get_template()
+        
+    def get_template(self):
+        template = main.jinja_env.get_template("templates/profile.html")
+        self.response.out.write(template.render())
+        
+
