@@ -40,7 +40,6 @@ config['webapp2_extras.sessions'] = {
 app = webapp2.WSGIApplication([
     ('/', HomeHandler),
     ('/logout', LogoutHandler),
-    ('/group', GroupHandler),
     ('/friend', FriendHandler),
     ('/profile', ProfileHandler),
 ], config=config, debug=True)
