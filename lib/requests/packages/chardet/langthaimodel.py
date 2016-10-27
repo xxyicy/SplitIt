@@ -52,7 +52,7 @@ TIS620CharToOrderMap = (
  68, 56, 59, 65, 69, 60, 70, 80, 71, 87,248,249,250,251,252,253,
 )
 
-# Model Table:
+# py Table:
 # total sequences: 100%
 # first 512 sequences: 92.6386%
 # first 1024 sequences:7.3177%

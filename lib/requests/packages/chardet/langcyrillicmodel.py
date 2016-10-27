@@ -141,7 +141,7 @@ IBM866_CharToOrderMap = (
 239, 68,240,241,242,243,244,245,246,247,248,249,250,251,252,255,
 )
 
-# Model Table:
+# py Table:
 # total sequences: 100%
 # first 512 sequences: 97.6601%
 # first 1024 sequences: 2.3389%

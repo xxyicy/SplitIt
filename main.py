@@ -18,9 +18,9 @@ import os
 
 import jinja2
 import webapp2
-
-from handlers.base_handlers import HomeHandler, LogoutHandler
 from webapp2_extras import sessions
+from handlers.base_handlers import HomeHandler, LogoutHandler, FriendsHandler, ProfileHandler
+
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
                                autoescape=True)
@@ -37,5 +37,8 @@ config['webapp2_extras.sessions'] = {
 
 app = webapp2.WSGIApplication([
     ('/', HomeHandler),
-    ('/logout', LogoutHandler)
+    ('/logout', LogoutHandler),
+    ('/friends', FriendsHandler),
+    ('/profile', ProfileHandler),
+    ('/edit_profile', ProfileHandler)
 ], config=config, debug=True)
