@@ -1,3 +1,4 @@
+from email import email
 import hashlib
 import json
 import logging
@@ -15,6 +16,7 @@ from webapp2_extras import sessions
 import facebook
 import main
 from models import User
+from utils import user_utils
 
 
 FACEBOOK_APP_ID = "1362095630475570"  # your own FB app id here
@@ -25,9 +27,23 @@ INVITATION_TEXT = "I invite you to try my app. It is amazing!"
 class BasePage(webapp2.RequestHandler):
   """Page handlers should inherit from this one."""
   def get(self):
-    pass
-
-
+    template = main.jinja_env.get_template(self.get_template())
+    user = self.current_user
+    self.handle_get(user)
+    values = {}
+    values = self.update_values(user, values)
+    self.response.out.write(template.render(values))
+    
+    
+  def post(self):
+    template = main.jinja_env.get_template(self.get_template())
+    user = self.current_user
+    self.handle_post(user)
+    values = {}
+    values = self.update_values(user, values)
+    self.response.out.write(template.render(values))
+      
+    
   def update_values(self, user, values):
     # Subclasses should override this method to add additional data.
     pass
@@ -36,37 +52,44 @@ class BasePage(webapp2.RequestHandler):
     # Subclasses must override this method to set the Jinja template.
     raise Exception("Subclass must implement handle_post!")
     pass
+  
+  def handle_get(self, user):
+      pass
+  
+  def handle_post(self, user):
+      pass
+  
 
   @property
   def current_user(self):
-    if self.session.get("user"):
-            # user is logged in
-        return self.session.get("user")
-    else: 
+    if "user" not in self.session:
         cookie = facebook.get_user_from_cookie(self.request.cookies, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET)
         if cookie:
-            # Store a local instance of the user data so we don't need
-            # a round-trip to Facebook on every request
+        # Store a local instance of the user data so we don't need
+        # a round-trip to Facebook on every request
             graph = facebook.GraphAPI(cookie["access_token"])
-            profile = graph.get_object("me")
-            user = User.query(User.id == cookie["uid"]).get()
+            profile = graph.get_object("me?fields=email,id,name")
+            user = User.get_by_id(str(profile["id"]), parent=user_utils.get_parent_key_from_facebookID(str(profile["id"])))
             if not user:
-                user = User(id=str(profile["id"]),
-                            name=profile["name"],
-                            access_token=cookie["access_token"])
-                print(profile.keys())
+                user = User(parent=user_utils.get_parent_key_from_facebookID(str(profile["id"])),id=str(profile["id"]))
+                user.name = profile["name"]
+                user.username = profile["name"]
+                user.access_token = cookie["access_token"]
                 user.put()
             elif user.access_token != cookie["access_token"]:
                 user.access_token = cookie["access_token"]
                 user.put()
-                
+                 
             self.session["user"] = dict(
                     id=str(profile["id"]),
                     name=profile["name"],
-                    access_token=cookie["access_token"]
-                )
+                    access_token = cookie["access_token"])
+
             return self.session.get("user")
-        return None
+        else:
+            return None
+    return self.session.get("user")
+
 
   def dispatch(self):
     self.session_store = sessions.get_store(request=self.request)
@@ -79,12 +102,33 @@ class BasePage(webapp2.RequestHandler):
   def session(self):
     return self.session_store.get_session()
     
+class LoginPage(BasePage):
+    def get(self):
+        template = main.jinja_env.get_template(self.get_template())
+        user = self.current_user
+        self.handle_get(user)
+        if user:
+            values = {}
+            values = self.update_values(user, values)
+            self.response.out.write(template.render(values))
+        else: 
+            self.redirect("/")
+            
+    def post(self):
+        template = main.jinja_env.get_template(self.get_template())
+        user = self.current_user
+        self.handle_post(user)
+        if user:
+            values = {}
+            values = self.update_values(user, values)
+            self.response.out.write(template.render(values))
+        else: 
+            self.redirect("/")
+            
 class BaseAction(webapp2.RequestHandler):
   """ALL action handlers should inherit from this one."""
   def post(self):
-    user = users.get_current_user()
-    if not user:
-      raise Exception("Missing user!")
+    pass
 #     account_info = account_utils.get_account_info(user)
 #     self.handle_post(user, account_info)
 
@@ -95,82 +139,51 @@ class BaseAction(webapp2.RequestHandler):
     raise Exception("Subclass must implement handle_post!")
 
 class HomeHandler(BasePage):
-    def get(self):
-        self.get_template()
- 
-    def post(self):
-        self.get_template()
-         
-    def get_template(self):
-        template = main.jinja_env.get_template("templates/base_page.html")
-        if "user" not in self.session:
-            cookie = facebook.get_user_from_cookie(self.request.cookies, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET)
-            if cookie:
-            # Store a local instance of the user data so we don't need
-            # a round-trip to Facebook on every request
-                graph = facebook.GraphAPI(cookie["access_token"])
-                profile = graph.get_object("me")
-                user = User.query(User.id == cookie["uid"]).get()
-                if not user:
-                    user = User(id=str(profile["id"]),
-                                name=profile["name"],
-                                access_token=cookie["access_token"])
-  
-                    user.put()
-                elif user.access_token != cookie["access_token"]:
-                    user.access_token = cookie["access_token"]
-                    user.put()
-                
-                self.session["user"] = dict(
-                        id=str(profile["id"]),
-                        name=profile["name"],
-                        access_token=cookie["access_token"])
-                self.redirect(uri="/")
-            else:
-                self.response.out.write(template.render({"facebook_app_id": FACEBOOK_APP_ID}))
-#           args = dict(current_user=self.current_user,
-#                     facebook_app_id=FACEBOOK_APP_ID)
-#           self.response.out.write(template.render(args))
+   
+    def update_values(self, user, values):
+        if user:
+          return dict(current_user=user,
+                            facebook_app_id=FACEBOOK_APP_ID)
         else:
-#           self.response.out.write(template.render({"facebook_app_id": FACEBOOK_APP_ID}))
-          args = dict(current_user=self.session.get("user"),
-                  facebook_app_id=FACEBOOK_APP_ID)
-          self.response.out.write(template.render(args))
+            return dict(facebook_app_id=FACEBOOK_APP_ID)
+
         
+        
+    def get_template(self):
+        return "templates/base_page.html"    
+         
         
 class LogoutHandler(BasePage):
     def get(self):
-        del self.session['user']
+        if "user" in self.session:
+            del self.session['user']
         self.redirect(uri="/")
-        
-class FriendHandler(BasePage):
-    def get(self):
-#         if "user" not in self.session:
-#             raise Exception("Missing user!")
-        self.get_template()
-        
-    def post(self):
-#         if "user" not in self.session:
-#             raise Exception("Missing user!")
-        self.get_template()
-        
-    def get_template(self):
-        template = main.jinja_env.get_template("templates/friends_list.html")
-        self.response.out.write(template.render())
-        
-class ProfileHandler(BasePage):
-    def get(self):
-#         if "user" not in self.session:
-#             raise Exception("Missing user!")
-        self.get_template()
-        
-    def post(self):
-#         if "user" not in self.session:
-#             raise Exception("Missing user!")
-        self.get_template()
-        
-    def get_template(self):
-        template = main.jinja_env.get_template("templates/profile.html")
-        self.response.out.write(template.render())
-        
 
+        
+class FriendsHandler(LoginPage):
+    def get_template(self):
+        return "templates/friends_list.html"    
+
+    def update_values(self, user, values):
+        return dict(current_user=user,
+                        facebook_app_id=FACEBOOK_APP_ID,
+                        friends_list= friends_utils.get_friends_list_from_user(user))
+                 
+
+class ProfileHandler(LoginPage):
+    
+    def handle_post(self, user):
+        userInfo = user_utils.get_user_by_facebookID(user["id"])
+        userInfo.name = self.request.get("inputName")
+        userInfo.username = self.request.get("inputUsername")
+        userInfo.email = self.request.get("inputEmail")
+        userInfo.phoneNumber = self.request.get("inputPhoneNumber")
+        userInfo.put()
+        
+    def get_template(self):
+        return "templates/profile.html"
+    
+    def update_values(self, user, values):
+        return dict(current_user= user_utils.get_user_by_facebookID(user["id"]),
+                        facebook_app_id=FACEBOOK_APP_ID)
+        
