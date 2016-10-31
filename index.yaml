@@ -10,3 +10,17 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Event
+  ancestor: yes
+  properties:
+  - name: eventName
+
+- kind: Friend
+  ancestor: yes
+  properties:
+  - name: nickname
+
+- kind: Group
+  ancestor: yes
+  properties:
+  - name: groupName

@@ -20,8 +20,7 @@ import jinja2
 import webapp2
 from webapp2_extras import sessions
 
-from handlers.base_handlers import HomeHandler, LogoutHandler, FriendsHandler, \
-    ProfileHandler
+from handlers import main_handler, insert_handlers, delete_handlers
 
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -38,10 +37,20 @@ config['webapp2_extras.sessions'] = {
 }
 
 app = webapp2.WSGIApplication([
-    ('/', HomeHandler),
-    ('/logout', LogoutHandler),
-    ('/friends', FriendsHandler),
-    ('/profile', 
-),
-    ('/edit_profile', ProfileHandler)
+    ('/', main_handler.HomeHandler),
+    ('/logout', main_handler.LogoutHandler),
+    ('/friends', main_handler.FriendsHandler),
+    ('/profile', main_handler.ProfileHandler),
+    ('/group', main_handler.GroupDetailHandler),
+    ('/events', main_handler.EventsHandler),
+    ('/event', main_handler.EventDetailHandler),
+    
+    ('/edit-profile', insert_handlers.ProfileAction),
+    ('/insert-group', insert_handlers.AddGroupAction),
+    ('/update-group', insert_handlers.UpdateGroupAction),
+    ('/insert-event', insert_handlers.AddEventAction),
+    ('/update-event', insert_handlers.UpdateEventAction),
+    
+    ('/delete-group', delete_handlers.DeleteGroupAction),
+    ('/delete-event', delete_handlers.DeleteEventAction),
 ], config=config, debug=True)
