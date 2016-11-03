@@ -15,11 +15,6 @@ indexes:
   properties:
   - name: eventName
 
-- kind: Friend
-  ancestor: yes
-  properties:
-  - name: nickname
-
 - kind: Group
   ancestor: yes
   properties:

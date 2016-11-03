@@ -2,7 +2,7 @@ from google.appengine.ext import ndb
 
 from handlers.base_handlers import BaseAction
 from models import Group, Event
-from utils import user_utils
+from utils import user_utils, friends_utils
 
 
 class ProfileAction(BaseAction):
@@ -19,8 +19,9 @@ class ProfileAction(BaseAction):
 class AddGroupAction(BaseAction):
     def handle_post(self, user):
         new_group = Group(parent=user_utils.get_parent_key(user),
-                      groupName = self.request.get("name"),
-                      groupDescription = self.request.get("description"))
+                      groupName=self.request.get("name"),
+                      groupDescription=self.request.get("description"),
+                      members=[user_utils.get_account_info(user).key])
         new_group.put()
         self.redirect("/group?group_key=" + new_group.key.urlsafe())
         
@@ -40,13 +41,13 @@ class UpdateGroupAction(BaseAction):
     
     for add_to_key in add_to_keys:
       if len(add_to_key) > 0:
-        friend = ndb.Key(urlsafe=add_to_key).get()
-        group.members.append(friend.key)  
+        friend = ndb.Key(urlsafe=add_to_key)
+        group.members.append(friend)  
 
     for remove_from_key in remove_from_keys:
       if len(remove_from_key) > 0:
-        friend = ndb.Key(urlsafe=remove_from_key).get()
-        group.members.remove(friend.key)
+        friend = ndb.Key(urlsafe=remove_from_key)
+        group.members.remove(friend)
 
     if group_name != group.groupName:
       group.groupName = group_name
@@ -55,23 +56,26 @@ class UpdateGroupAction(BaseAction):
         
     group.put()
 
-    self.redirect("/events?group_key="+group.key.urlsafe())
+    self.redirect("/events?group_key=" + group.key.urlsafe())
     
 class AddEventAction(BaseAction):
     def handle_post(self, user):
         new_event = Event(parent=user_utils.get_parent_key(user),
-                      eventName = self.request.get("eventName"),
-                      eventDescription = self.request.get("eventDescription"))
+                      eventName=self.request.get("eventName"),
+                      eventDescription=self.request.get("eventDescription"))
         new_event.put()
         
-        group = ndb.Key(urlsafe=self.request.get("group_entity_key")).get()
+        group_key = ndb.Key(urlsafe=self.request.get("group_entity_key"))
+        group = group_key.get()
         group.events.append(new_event.key)
         group.put()
         
-        self.redirect("/event?event_key=" + new_event.key.urlsafe())
+        self.redirect("/event?event_key=" + new_event.key.urlsafe() + "&group_key=" + group_key.urlsafe())
         
         
 class UpdateEventAction(BaseAction):
   def handle_post(self, user):
-    pass
+    # TODO: update event from db and get group_key     
+    group_key = ""
+    self.redirect("/events?group_key=" + group_key)
         

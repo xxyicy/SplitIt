@@ -9,24 +9,24 @@ class User(ndb.Model):
     nickname = ndb.StringProperty(default="")
     avatarUrl = ndb.StringProperty(default="")
     phoneNumber = ndb.StringProperty(default="")
-
-class Friend(ndb.Model):
-    nickname = ndb.StringProperty(default="")
-    email = ndb.StringProperty(default="")
-    phoneNumber = ndb.StringProperty(default="")
-
+    friendList = ndb.KeyProperty(kind='User',repeated=True)
+    
 class Event(ndb.Model):
     eventName = ndb.StringProperty()
     eventDescription = ndb.StringProperty()
-    members = ndb.KeyProperty(kind=Friend,repeated=True)
+    members = ndb.KeyProperty(kind=User,repeated=True)
     expenses = ndb.IntegerProperty()
     
 class Group(ndb.Model):
     groupName = ndb.StringProperty()
     groupDescription = ndb.StringProperty()
-    members = ndb.KeyProperty(kind=Friend,repeated=True)
+    members = ndb.KeyProperty(kind=User,repeated=True)
     events = ndb.KeyProperty(kind=Event,repeated=True)
     expenses = ndb.IntegerProperty(repeated=True)
+    finished = ndb.BooleanProperty(default=False)
+    finishDate = ndb.DateProperty()
+    
+
     
 
     

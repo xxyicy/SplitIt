@@ -1,6 +1,8 @@
 
+from google.appengine.ext import ndb
+
 import facebook
-from models import User, Friend
+from models import User
 from utils import user_utils
 
 
@@ -18,8 +20,8 @@ def get_friends_list_from_cookie(cookie):
     return friends
 
 def get_friends_list_from_user(user):
-    parent_key = user_utils.get_parent_key(user)
-    return get_friends_list_for_parent_key(parent_key)
-
-def get_friends_list_for_parent_key(parent_key):
-  return Friend.query(ancestor=parent_key).order(Friend.nickname).fetch()
+    account_info = user_utils.get_account_info(user)
+    friends = []
+    for friend in account_info.friendList:
+        friends.append(friend.get())
+    return friends

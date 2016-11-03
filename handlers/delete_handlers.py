@@ -12,4 +12,6 @@ class DeleteGroupAction(BaseAction):
     
 class DeleteEventAction(BaseAction):
     def handle_post(self, user):
-        pass
+        # TODO: delete from db and get group_key     
+        group_key = ""
+        self.redirect("/events?group_key=" + group_key)

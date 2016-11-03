@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 import facebook
 from handlers.base_handlers import BaseHandler, FACEBOOK_APP_ID, BasePage, \
     FACEBOOK_APP_SECRET
-from models import Group, Friend
+from models import Group
 from utils import friends_utils, user_utils, group_utils, event_utils
 
 
@@ -53,16 +53,12 @@ class FriendsHandler(BasePage):
         friend_list = friends_utils.get_friends_list_from_cookie(cookie)
         values["friends_list"] = friend_list
         
+        account_info = user_utils.get_account_info(user)
+        
         for friend in friend_list:
-            user_friend = Friend.get_by_id(friend.key.id(),
-                                           parent=user_utils.get_parent_key(user));
-            if not user_friend:
-                user_friend = Friend(parent=user_utils.get_parent_key(user),
-                                     id=friend.key.id(),
-                                     nickname=friend.nickname,
-                                     email=friend.email,
-                                     phoneNumber=friend.phoneNumber)
-                user_friend.put()
+            if friend.key not in account_info.friendList:
+                account_info.friendList.append(friend.key)
+        account_info.put()
 
 class ProfileHandler(BasePage):
     
@@ -100,7 +96,8 @@ class EventsHandler(BasePage):
         events = event_utils.get_events_from_group(user, group)
             
         event_member_map = {}
-        friends = friends_utils.get_friends_list_from_user(user)
+        
+        friends = group_utils.get_members_exclude_user(user, group)
         for event in events:
             event_member_map[event.key.urlsafe()] = ""
             current_member = ""
@@ -122,7 +119,8 @@ class EventDetailHandler(BasePage):
         
     def update_values(self, user, values):
         event = ndb.Key(urlsafe=self.request.get('event_key')).get()
-        friends = friends_utils.get_friends_list_from_user(user)
+        group = ndb.Key(urlsafe=self.request.get('group_key')).get()
+        friends = group_utils.get_members_exclude_user(user,group)
         friends_in_event = []
         friends_not_in_event = []
         for friend in friends:

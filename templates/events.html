@@ -10,19 +10,32 @@
 {% endblock %}
 
 
-
-<div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-tablet">
-    <h2 class="page-title">
-      <span id="group-name">{{ group.groupName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </h2>
-  </div>
-  <div class="mdl-cell mdl-cell--4-col  mdl-cell--4-col-tablet group-buttons">
-  	<input name="group_entity_key" type="hidden" value="{{ group.key.urlsafe() }}">
-    <button id="edit-group-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
-      Edit
-    </button>
-  </div>
+<div class="container">
+	<div class="mdl-grid">
+	  <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+	    <h2 class="page-title">
+	      <span id="group-name">{{ group.groupName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    </h2>
+	  </div>
+	  <div class="mdl-cell mdl-cell--6-col  mdl-cell--6-col-tablet group-buttons">
+	  	<input name="group_entity_key" type="hidden" value="{{ group.key.urlsafe() }}">
+	  	<a href="/" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+	          Back to all Groups
+	    </a>
+	    <button id="edit-group-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+	      {% if group.key.parent().id() == account_info.key.id() %}
+	      Edit
+	      {% else %}
+	      Details
+	      {% endif %}
+	    </button>
+	     {% if group.key.parent().id() == account_info.key.id() %} 
+	     <button id="finish-group-btn" type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+          Finish
+        </button>
+        {% endif %}
+	  </div>
+	</div>
 </div>
 <hr>
     
@@ -42,8 +55,12 @@
 	<h2 class="page-title">Events</h2>
 	<hr>
 </div>
-<div class="mdl-grid">{% for event in events %} {% include
-	"templates/event_card.html" %} {% endfor %}</div>
+<div class="mdl-grid">
+	<input name="group_entity_key" type="hidden" value="{{ group.key.urlsafe() }}">
+	{% for event in events %} 
+		{% include "templates/event_card.html" %} 
+	{% endfor %}
+</div>
 	
 	
 {% endblock %}

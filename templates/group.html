@@ -13,16 +13,20 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
     <input name="group_name" type="hidden" value="{{ group.groupName }}">
     <input name="group_description" type="hidden" value="{{ group.groupDescription }}">
     <input name="group_entity_key" type="hidden" value="{{ group.key.urlsafe() }}">
+    <input name="user_key" type="hidden" value="{{ account_info.key.id() }}">
+    <input name="group_parent_key" type="hidden" value="{{ group.key.parent().id() }}">
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-tablet">
         <h2 class="page-title">
           <span id="group-name">{{ group.groupName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {% if group.key.parent().id() == account_info.key.id() %}
           <button type="button" id="edit-group-info-btn" class="mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">edit</i>
           </button>
           <button type="button" id="delete-group-btn" class="mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">delete</i>
           </button>
+          {% endif %}
         </h2>
         <input name="group_keys_to_add" type="text" style="display: none;">
         <input name="group_keys_to_remove" type="text" style="display: none;">
@@ -31,9 +35,11 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
         <button id="back-group-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
           Back
         </button>
+        {% if group.key.parent().id() == account_info.key.id() %}
         <button id="save-group-btn" type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
           Save
         </button>
+        {% endif %}
       </div>
     </div>
   </form>

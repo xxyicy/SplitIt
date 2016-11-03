@@ -89,36 +89,42 @@ rh.splitit.groupPageInit = function() {
 		  window.location.replace("/events?group_key=" + groupKey);
 	  })
 	  
+	
 	$(".concise-friend-card").click(function() {
-		$elem = $(this);
-		var isInListBeforeClick = $elem.parents(".friends-in-group").length > 0;
-		var hasMovedClass = $elem.hasClass("moved-contact");
-		var entityKey = $(this).find(".entity-key").html();
-		groupKeysToAddString = $("input[name=group_keys_to_add]").val();
-		groupKeysToRemoveString = $("input[name=group_keys_to_remove]").val();
-
-		$elem.detach();
-		if (isInListBeforeClick && hasMovedClass) {
-			$elem.appendTo(".friends-not-in-group > .mdl-grid").removeClass("moved-contact");
-			groupKeysToAddString = rh.splitit.toggleStringInList(groupKeysToAddString,entityKey);
-		} else if (isInListBeforeClick && !hasMovedClass) {
-			$elem.appendTo(".friends-not-in-group > .mdl-grid").addClass("moved-contact");
-			groupKeysToRemoveString = rh.splitit.toggleStringInList(groupKeysToRemoveString,entityKey);
-		} else if (!isInListBeforeClick && hasMovedClass) {
-			$elem.appendTo(".friends-in-group > .mdl-grid").removeClass("moved-contact");
-			groupKeysToRemoveString = rh.splitit.toggleStringInList(groupKeysToRemoveString,entityKey);
-		} else if (!isInListBeforeClick && !hasMovedClass) {
-			$elem.appendTo(".friends-in-group > .mdl-grid").addClass("moved-contact");
-			groupKeysToAddString = rh.splitit.toggleStringInList(groupKeysToAddString,entityKey);
+		if ($("input[name=user_key]").val() === $("input[name=group_parent_key]").val()){
+			$elem = $(this);
+			var isInListBeforeClick = $elem.parents(".friends-in-group").length > 0;
+			var hasMovedClass = $elem.hasClass("moved-contact");
+			var entityKey = $(this).find(".entity-key").html();
+			groupKeysToAddString = $("input[name=group_keys_to_add]").val();
+			groupKeysToRemoveString = $("input[name=group_keys_to_remove]").val();
+	
+			$elem.detach();
+			if (isInListBeforeClick && hasMovedClass) {
+				$elem.appendTo(".friends-not-in-group > .mdl-grid").removeClass("moved-contact");
+				groupKeysToAddString = rh.splitit.toggleStringInList(groupKeysToAddString,entityKey);
+			} else if (isInListBeforeClick && !hasMovedClass) {
+				$elem.appendTo(".friends-not-in-group > .mdl-grid").addClass("moved-contact");
+				groupKeysToRemoveString = rh.splitit.toggleStringInList(groupKeysToRemoveString,entityKey);
+			} else if (!isInListBeforeClick && hasMovedClass) {
+				$elem.appendTo(".friends-in-group > .mdl-grid").removeClass("moved-contact");
+				groupKeysToRemoveString = rh.splitit.toggleStringInList(groupKeysToRemoveString,entityKey);
+			} else if (!isInListBeforeClick && !hasMovedClass) {
+				$elem.appendTo(".friends-in-group > .mdl-grid").addClass("moved-contact");
+				groupKeysToAddString = rh.splitit.toggleStringInList(groupKeysToAddString,entityKey);
+			}
+			$("input[name=group_keys_to_add]").val(groupKeysToAddString);
+			$("input[name=group_keys_to_remove]").val(groupKeysToRemoveString);
+		}else {
+			console.log($("input[name=user_key]").val())
+			console.log($("input[name=group_parent_key]").val())
 		}
-		$("input[name=group_keys_to_add]").val(groupKeysToAddString);
-		$("input[name=group_keys_to_remove]").val(groupKeysToRemoveString);
 	});
 }
 
 
 rh.splitit.eventsPageInit = function() {
-	// Insert Group - Create
+	// Insert Event - Create
 	$("#add-event-btn").click(function() {
 		document.querySelector('#add-event-dialog').showModal();
 	});
@@ -133,10 +139,12 @@ rh.splitit.eventsPageInit = function() {
 		window.location.replace("/group?group_key=" + groupKey);
 	})
 
-	// Insert Group - Edit
+	// Insert Event - Edit
 	$(".event-card").click(function() {
 		var eventKey = $(this).find(".entity-key").html();
-		window.location.replace("/event?event_key=" + eventKey);
+		var groupKey = $("input[name=group_entity_key]").val();
+		
+		window.location.replace("/event?event_key=" + eventKey +"&group_key="+groupKey);
 	});
 };
 
