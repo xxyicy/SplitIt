@@ -43,6 +43,7 @@ rh.splitit.profilePageInit = function() {
 		$("#save-btn").addClass("hidden");
 		$("#edit-btn").removeClass("hidden");
 	})
+
 }
 
 rh.splitit.groupsPageInit = function() {
@@ -89,9 +90,9 @@ rh.splitit.groupPageInit = function() {
 		  window.location.replace("/events?group_key=" + groupKey);
 	  })
 	  
-	
 	$(".concise-friend-card").click(function() {
-		if ($("input[name=user_key]").val() === $("input[name=group_parent_key]").val()){
+		var finished = $("input[group_finished]").val()
+		if ($("input[name=user_key]").val() === $("input[name=group_parent_key]").val() && !finished){
 			$elem = $(this);
 			var isInListBeforeClick = $elem.parents(".friends-in-group").length > 0;
 			var hasMovedClass = $elem.hasClass("moved-contact");
@@ -146,6 +147,11 @@ rh.splitit.eventsPageInit = function() {
 		
 		window.location.replace("/event?event_key=" + eventKey +"&group_key="+groupKey);
 	});
+	
+	 $("#finish-group-btn").click(function() {
+		  var groupKey = $("input[name=group_entity_key]").val();
+		  window.location.replace("/finish-group?group_key=" + groupKey);
+	  })
 };
 
 rh.splitit.eventPageInit = function() {

@@ -1,0 +1,41 @@
+{% extends "templates/base_page.html" %} {% block setActive %}
+<script>
+	// Optional, highlight the Lists item (even though this is an individual list)
+	$("a.mdl-layout__tab[href='/']").addClass("is-active");
+</script>
+{% endblock %} {% block content %}
+<div class="container">
+	
+	<div class="mdl-grid">
+		<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-tablet">
+			<h2 class="page-title">
+				<span id="group-name">{{ group.groupName }} -- FINSHED</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</h2>
+			<input name="group_keys_to_add" type="text" style="display: none;">
+			<input name="group_keys_to_remove" type="text"
+				style="display: none;">
+		</div>
+		<div
+			class="mdl-cell mdl-cell--4-col  mdl-cell--4-col-tablet group-buttons">
+			<a href="/" type="button"
+				class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+				Back to all Groups </a>
+		</div>
+	</div>
+	
+	<p id="group-description">{{ group.groupDescription }} -- Finished on {{ group.finishDate }}</p>
+    <p>Members that are in this group: {{ length }} members</p> 
+   	<input name="group_finished" type="hidden" value="{{ group.finished }}">
+    <div class="friends-in-group">
+      <div class="mdl-grid">
+        {% for friend in friends_in_group %}
+        	{% include "templates/concise_friend_card.html" %}
+        {% endfor %}
+      </div>
+    </div>
+</div>
+
+<hr>
+{% endblock %} 
+
+{% block modals %} {% endblock %}

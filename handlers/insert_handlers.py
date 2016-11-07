@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 from handlers.base_handlers import BaseAction
 from models import Group, Event
 from utils import user_utils, friends_utils
-
+import datetime
 
 class ProfileAction(BaseAction):
     def handle_post(self, user):
@@ -57,6 +57,16 @@ class UpdateGroupAction(BaseAction):
     group.put()
 
     self.redirect("/events?group_key=" + group.key.urlsafe())
+    
+class FinishGroupAction(BaseAction):
+    def handle_post(self, user):
+        group_key = self.request.get("group_key")
+        group = ndb.Key(urlsafe=group_key).get()
+        group.finished = True
+        group.finishDate = datetime.datetime.now()
+        group.put()
+        
+        self.redirect("/")
     
 class AddEventAction(BaseAction):
     def handle_post(self, user):

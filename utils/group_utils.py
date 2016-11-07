@@ -18,3 +18,33 @@ def get_members_exclude_user(user,group):
         if member_key != account_info.key:
             members.append(member_key.get())
     return members;
+
+def get_members(user, group):
+    members = []
+    account_info = user_utils.get_account_info(user)
+    for member_key in group.members:
+        members.append(member_key.get())
+    return members;
+
+def get_friends_in_group(friends, group):
+    friends_in_group = []
+    for friend in friends:
+      if friend.key in group.members:
+        friends_in_group.append(friend)
+    return friends_in_group
+
+def get_friends_not_in_group(friends, group):
+    friends_not_in_group = []
+    for friend in friends:
+      if friend.key not in group.members:
+        friends_not_in_group.append(friend)
+    return friends_not_in_group
+
+def get_expenses_for_user(user, group):
+    events = []
+    for event_key in group.events:
+        events.append(event_key.get())
+    expense_map = {}
+#     for event in events:
+#         if user.key.urlsafe() != event.
+    return expense_map
