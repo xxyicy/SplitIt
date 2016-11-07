@@ -1,3 +1,4 @@
+
 import facebook
 from google.appengine.ext import ndb
 from handlers.base_handlers import BaseHandler, FACEBOOK_APP_ID, BasePage, \

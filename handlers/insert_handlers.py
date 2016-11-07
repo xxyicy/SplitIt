@@ -62,11 +62,14 @@ class UpdateGroupAction(BaseAction):
 class AddEventAction(BaseAction):
     def handle_post(self, user):
         userInfo = user_utils.get_account_info(user)
+        event_totalCost = self.request.get("eventTotalCost")
+        if not event_totalCost:
+            event_totalCost = 0
         new_event = Event(parent=user_utils.get_parent_key(user),
                       eventName=self.request.get("eventName"),
                       eventDescription=self.request.get("eventDescription"),
                       payer=userInfo.key,
-                      totalCost=float(self.request.get("eventTotalCost")),
+                      totalCost=float(event_totalCost),
                       group_key=self.request.get("group_entity_key"))
         new_event.put()
         
@@ -86,6 +89,8 @@ class UpdateEventAction(BaseAction):
     event_name = self.request.get('event_name')
     event_description = self.request.get('event_description')
     event_totalCost = self.request.get('event_totalCost')
+    if not event_totalCost:
+        event_totalCost = 0
     urlsafe_entity_key = self.request.get('event_entity_key')
     urlsafe_event_keys_to_add = self.request.get('event_keys_to_add')
     urlsafe_event_keys_to_remove = self.request.get('event_keys_to_remove')

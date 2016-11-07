@@ -46,7 +46,7 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
     </div>
   </form>
     <p id="event-description">{{ event.eventDescription }}</p>
-    <p id="event-totalCost">{{ event.totalCost }}</p>
+    <p>{{event.payer.get().name}}&nbsp;&nbsp;paied&nbsp;&nbsp;$<span id="event-totalCost">{{ event.totalCost }}</span></p>
     {% if user.key.urlsafe() == event.payer.urlsafe() %}
     <hr>
     <h4>Friends that are <b>in</b> this event</h4>
@@ -69,6 +69,7 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
     </div>
     {% endif %}
     <hr>
+    {% if user.key.urlsafe() == event.payer.urlsafe() %}
     <div class="mdl-cell mdl-cell--4-col  mdl-cell--4-col-tablet">
     <button id="split-event-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
     	Split It Evenly
@@ -77,6 +78,7 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
 	   	Clear Expenses
 	</button>
     </div>
+    {% endif %}
     <div class="expenses-table">
     	{% if user.key.urlsafe() == event.payer.urlsafe() %}
     	<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
@@ -86,7 +88,7 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
   			<thead>
     			<tr>
       				<th class="mdl-data-table__cell--non-numeric">Name</th>
-      				<th>Expense</th>
+      				<th>Expense($)</th>
       				<th>Phone Number</th>
       				<th>Email</th>
     			</tr>
@@ -96,14 +98,14 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
   					{% if user.key.urlsafe() == event.payer.urlsafe() %}
   					<tr id="tr{{ expense.person.urlsafe() }}" class="exp-tr">		 			
       					<td class="mdl-data-table__cell--non-numeric">{{ expense.person.get().name }}</td>
-      					<td id="cost" class="{{ expense.key.urlsafe() }}" contenteditable='true'>${{ expense.cost }}</td>
+      					<td id="cost" class="{{ expense.key.urlsafe() }}" contenteditable='true'>{{ expense.cost }}</td>
       					<td>{{ expense.person.get().phoneNumber }}</td>
      					<td>{{ expense.person.get().email }}</td>
    				 	</tr>
    				 	{% else %}
    				 	<tr id="tr{{ expense.person.urlsafe() }}" class="exp-tr">		 			
       					<td class="mdl-data-table__cell--non-numeric">{{ expense.person.get().name }}</td>
-      					<td id="cost" class="{{ expense.key.urlsafe() }}">${{ expense.cost }}</td>
+      					<td id="cost" class="{{ expense.key.urlsafe() }}">{{ expense.cost }}</td>
       					<td>{{ expense.person.get().phoneNumber }}</td>
      					<td>{{ expense.person.get().email }}</td>
    				 	</tr>
@@ -112,7 +114,7 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
      			{% for friend in friends_not_in_event %}
   					<tr id="tr{{ friend.key.urlsafe() }}" class="exp-tr hide">		 			
       					<td class="mdl-data-table__cell--non-numeric">{{ friend.name }}</td>
-      					<td id="cost" class="none" contenteditable='true'>$0.0</td>
+      					<td id="cost" class="none" contenteditable='true'>0.0</td>
       					<td>{{ friend.phoneNumber }}</td>
      					<td>{{ friend.email }}</td>
    				 	</tr>
@@ -122,6 +124,7 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
     </div>
   </div>
   <hr>
+
 
 {% endblock %}
 
@@ -139,7 +142,7 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
         <label class="mdl-textfield__label" for="eventDescription">Description</label>
       </div>
       <div id="total-cost-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      	<input class="mdl-textfield__input" type="text" name="eventTotalCost" value="{{ event.totalCost }}">
+      	<input class="mdl-textfield__input" type="number" name="eventTotalCost" value="{{ event.totalCost }}">
         <label class="mdl-textfield__label" for="eventTotalCost">Total Cost</label>
       </div>
       <p class="sidenote">Note, changes won't be saved unless you hit the page Save button</p>

@@ -236,7 +236,7 @@ rh.splitit.eventPageInit = function() {
 		  var elements = $("tr[class$='exp-tr']");
 		  elements.each(function() {
 			  var text = $(this).find("#cost").html();
-			  var cost = parseFloat(text.substring(1, text.length));
+			  var cost = parseFloat(text);
 			  if (!cost && cost!= 0) {
 				  alert("Please enter correct number!");
 				  return;
@@ -245,7 +245,7 @@ rh.splitit.eventPageInit = function() {
 		  });
 		  var elements2 = $("tr[class$='exp-tr is-selected'] ");
 		  elements2.each(function() {
-			  $(this).find("#cost").html("$"+totalCost/elements2.length);
+			  $(this).find("#cost").html(totalCost/elements2.length);
 		  });
 		  
 	  })
@@ -253,7 +253,7 @@ rh.splitit.eventPageInit = function() {
 	  $("#clear-expenses-btn").click(function(){
 		  var elements = $("tr");
 		  elements.each(function() {
-			  $(this).find("#cost").html("$0.0");
+			  $(this).find("#cost").html("0.0");
 		  });
 	  })
 	  
@@ -272,9 +272,9 @@ rh.splitit.eventPageInit = function() {
 		  var elements = $("tr[class$='exp-tr']");
 		  elements.each(function() {
 			  var text = $(this).find("#cost").html();
-			  var cost = parseFloat(text.substring(1, text.length));
+			  var cost = parseFloat(text);
 			  if (!cost && cost!= 0) {
-				  alert("Please enter correct number!");
+				  alert("Please enter correct number on expenses table!");
 				  return;
 			  }
 			  var expense_key = $(this).find("#cost").attr("class");
@@ -291,9 +291,9 @@ rh.splitit.eventPageInit = function() {
 		  var elements2 = $("tr[class$='exp-tr is-selected']");
 		  elements2.each(function() {
 			  var text = $(this).find("#cost").html();
-			  var cost = parseFloat(text.substring(1, text.length));
+			  var cost = parseFloat(text);
 			  if (!cost && cost!= 0) {
-				  alert("Please enter correct number!");
+				  alert("Please enter correct number expenses table!");
 				  return;
 			  }
 			  var expense_key = $(this).find("#cost").attr("class");
@@ -310,7 +310,7 @@ rh.splitit.eventPageInit = function() {
 		  
 		  console.log(totalCost);
 		  if (totalCost < -0.00001 || totalCost > 0.00001){
-			  alert("Please enter correct number!");
+			  alert("Expenses are not equal to total cost!");
 			  return;
 		  }
 		  
