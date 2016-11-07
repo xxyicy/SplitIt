@@ -1,0 +1,169 @@
+{% extends "templates/base_page.html" %}
+
+{% block setActive %}
+<script>
+// Optional, highlight the Lists item (even though this is an individual list)
+$("a.mdl-layout__tab[href='/']").addClass("is-active");
+</script>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+  <form>
+    <input name="event_name" type="hidden" value="{{ event.eventName }}">
+    <input name="event_description" type="hidden" value="{{ event.eventDescription }}">
+    <input name="event_totalCost" type="hidden" value="{{ event.totalCost }}">
+    <input name="event_entity_key" type="hidden" value="{{ event.key.urlsafe() }}">
+    <input name="user_key" type="hidden" value="{{ account_info.key.id() }}">
+    <input name="event_parent_key" type="hidden" value="{{ event.key.parent().id() }}">
+    <input name="group_key" type="hidden" value="{{ event.group_key }}">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-tablet">
+        <h2 class="page-title">
+          <span id="event-name">{{ event.eventName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {% if user.key.urlsafe() == event.payer.urlsafe() %}
+          <button type="button" id="edit-event-info-btn" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">edit</i>
+          </button>
+          <button type="button" id="delete-event-btn" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">delete</i>
+          </button>
+          {% endif %}
+        </h2>
+        <input name="event_keys_to_add" type="text" style="display: none;">
+        <input name="event_keys_to_remove" type="text" style="display: none;">
+      </div>
+      <div class="mdl-cell mdl-cell--4-col  mdl-cell--4-col-tablet event-buttons">
+        <button type="button" class="go-back-to-events-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+	          Back to all Events
+	    </button>
+	    {% if user.key.urlsafe() == event.payer.urlsafe() %}
+        <button id="save-event-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+          Save
+        </button>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+    <p id="event-description">{{ event.eventDescription }}</p>
+    <p id="event-totalCost">{{ event.totalCost }}</p>
+    {% if user.key.urlsafe() == event.payer.urlsafe() %}
+    <hr>
+    <h4>Friends that are <b>in</b> this event</h4>
+    <div class="friends-in-event">
+      <div class="mdl-grid">
+        {% for friend in friends_in_event %}
+          {% include "templates/concise_friend_card.html" %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+    <h4>Friends that are <b>NOT</b> in this  this event</h4>
+    <div class="friends-not-in-event">
+      <div class="mdl-grid">
+        {% for friend in friends_not_in_event %}
+          {% include "templates/concise_friend_card.html" %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <hr>
+    <div class="mdl-cell mdl-cell--4-col  mdl-cell--4-col-tablet">
+    <button id="split-event-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+    	Split It Evenly
+    </button>
+    <button id="clear-expenses-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+	   	Clear Expenses
+	</button>
+    </div>
+    <div class="expenses-table">
+    	{% if user.key.urlsafe() == event.payer.urlsafe() %}
+    	<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+    	{% else %}
+    	<table class="mdl-data-table mdl-js-data-table">
+    	{% endif %}
+  			<thead>
+    			<tr>
+      				<th class="mdl-data-table__cell--non-numeric">Name</th>
+      				<th>Expense</th>
+      				<th>Phone Number</th>
+      				<th>Email</th>
+    			</tr>
+  			</thead>
+ 			 <tbody>
+  				{% for expense in expenses %}
+  					{% if user.key.urlsafe() == event.payer.urlsafe() %}
+  					<tr id="tr{{ expense.person.urlsafe() }}" class="exp-tr">		 			
+      					<td class="mdl-data-table__cell--non-numeric">{{ expense.person.get().name }}</td>
+      					<td id="cost" class="{{ expense.key.urlsafe() }}" contenteditable='true'>${{ expense.cost }}</td>
+      					<td>{{ expense.person.get().phoneNumber }}</td>
+     					<td>{{ expense.person.get().email }}</td>
+   				 	</tr>
+   				 	{% else %}
+   				 	<tr id="tr{{ expense.person.urlsafe() }}" class="exp-tr">		 			
+      					<td class="mdl-data-table__cell--non-numeric">{{ expense.person.get().name }}</td>
+      					<td id="cost" class="{{ expense.key.urlsafe() }}">${{ expense.cost }}</td>
+      					<td>{{ expense.person.get().phoneNumber }}</td>
+     					<td>{{ expense.person.get().email }}</td>
+   				 	</tr>
+   				 	{% endif %}
+    			{% endfor %}
+     			{% for friend in friends_not_in_event %}
+  					<tr id="tr{{ friend.key.urlsafe() }}" class="exp-tr hide">		 			
+      					<td class="mdl-data-table__cell--non-numeric">{{ friend.name }}</td>
+      					<td id="cost" class="none" contenteditable='true'>$0.0</td>
+      					<td>{{ friend.phoneNumber }}</td>
+     					<td>{{ friend.email }}</td>
+   				 	</tr>
+    			{% endfor %} 
+  			</tbody>
+		</table>
+    </div>
+  </div>
+  <hr>
+
+{% endblock %}
+
+{% block modals %}
+<dialog id='edit-event-info-dialog' class="mdl-dialog">
+  <h4 class="mdl-dialog__title">Edit event name</h4>
+    <input name="event_entity_key" type="hidden" >
+    <div class="mdl-dialog__content">
+      <div id="name-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" name="eventName" value="{{ event.eventName }}">
+        <label class="mdl-textfield__label" for="eventName">Name</label>
+      </div>
+      <div id="description-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      	<input class="mdl-textfield__input" type="text" name="eventDescription" value="{{ event.eventDescription }}">
+        <label class="mdl-textfield__label" for="eventDescription">Description</label>
+      </div>
+      <div id="total-cost-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      	<input class="mdl-textfield__input" type="text" name="eventTotalCost" value="{{ event.totalCost }}">
+        <label class="mdl-textfield__label" for="eventTotalCost">Total Cost</label>
+      </div>
+      <p class="sidenote">Note, changes won't be saved unless you hit the page Save button</p>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button id="done-editing-event-info" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent close-parent-dialog">Done</button>
+    </div>
+</dialog>
+
+<dialog id='delete-event-dialog' class="mdl-dialog">
+  <h4 class="mdl-dialog__title">Delete event</h4>
+  <form action="/delete-event" method="POST">
+    <input type="hidden" name="event_to_delete_key" value="{{event.key.urlsafe()}}">
+    <div class="mdl-dialog__content">
+      <p class="delete-modal-body">
+        Are you sure you wish to delete <b><span
+          id="delete-event-name">{{event.eventName}}</span></b>?<br>
+      </p>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="submit" class="delete-btn mdl-button mdl-js-button mdl-button--raised">Delete event</button>
+      <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent close-parent-dialog">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+{% endblock %}

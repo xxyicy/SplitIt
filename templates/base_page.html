@@ -41,6 +41,7 @@
 
 <!-- Custom CSS/JS -->
 <link rel="stylesheet" href="/static/css/split-it.css">
+<script src="/static/javascript/split-it.js"></script>
 
 
 </head>
@@ -55,6 +56,7 @@
 			<div
 				class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
 				{% if current_user is defined %} <a href="/" class="mdl-layout__tab">GROUPS</a>
+
 				<a href="/friends" class="mdl-layout__tab">FRIENDS</a> <a
 					href="/profile" class="mdl-layout__tab">PROFILE</a>
 				<div class="mdl-layout-spacer"></div>
@@ -66,22 +68,37 @@
 				<ul
 					class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 					for="options-menu">
-					<li><a href="/profile" class="mdl-menu__item">{{ current_user.name}}</a></li>
+
+					<li><a href="/profile" class="mdl-menu__item">{{
+							current_user.name}}</a></li>
+
 					<li><a href="/logout" class="mdl-menu__item"
 						onclick="FB.logout()">Logout</a></li>
 				</ul>
 				{% endif %}
 			</div>
 		</header>
-		<main class="mdl-layout__content"> {% if current_user is not
-		defined %}
-		<div id="fbButton">
-			<fb:login-button data-size="xlarge" autologoutlink="false"
-				scope="publish_actions, user_friends"></fb:login-button>
+
+		<main class="mdl-layout__content">
+		<div class="container">
+			<div class="row">
+				<div class="text-center">
+					{% if current_user is not defined %}
+
+					<fb:login-button data-size="xlarge" autologoutlink="false"
+						scope="publish_actions, user_friends"></fb:login-button>
+
+					{% endif %}
+
+				</div>
+			</div>
+			{% block setActive %}{% endblock %} 
+			{% block content %}{% endblock %}
+			{% block modals %}{% endblock %}
 		</div>
-		{% endif %} {% block content %}{% endblock %} </main>
+		</main>
 		<div id="fb-root"></div>
-		{% block setActive %}{% endblock %}
+
 		<script>
 			window.fbAsyncInit = function() {
 				FB.init({

@@ -1,12 +1,14 @@
-#fbButton {
-	margin: 20% auto;
-	text-align: center;
-}
-
 .container {
 	padding-top: 20px;
 }
 
+#add-group-btn {
+	float: right
+}
+
+#add-event-btn {
+	float: right
+}
 
 @media ( min-width : 1200px) {
 	.container:not (.fluid ), .mdl-grid:not (.fluid ) {
@@ -27,28 +29,49 @@
 }
 
 .mdl-card {
-	width: initial; /* Use the grid system to set the width of the cards */
+  width: initial; /* Use the grid system to set the width of the cards */
 }
 
-.contact-card .mdl-card .mdl-card__supporting-text {
-	margin: 20px;
-	width: calc(100% - 40px);
+.group-card .mdl-card .mdl-card__supporting-text {
+  margin: 20px;
+  width: calc(100% - 40px);
 }
 
-.contact-card .mdl-card {
-	min-height: 172px;
+.event-card .mdl-card .mdl-card__supporting-text {
+  margin: 20px;
+  width: calc(100% - 40px);
 }
 
-.concise-contact-card .mdl-card {
-	min-height: 0px;
+.concise-friend-card .mdl-card {
+	min-height: 0;
 }
 
-.concise-contact-card .mdl-card .mdl-card__supporting-text {
-	margin: 10px 20px;
-	width: calc(100% - 40px);
+.concise-friend-card .mdl-card .mdl-card__supporting-text {
+  margin: 10px 20px;
+  width: calc(100% - 20px);
+  
 }
 
-.delete-contact-btn {
-	margin: 8px;
+.moved-contact>.mdl-card {
+  background-color: rgba(255, 255, 0, 0.25)
+}
+
+
+#save-group-btn {
+  width: 96px; /* to matach default Back button size. */
+  margin-left: 10px;
+}
+
+
+.group-buttons {
+  text-align: right;
+}
+
+.mdl-textfield {
+  width: 100% !important;
+}
+dialog.mdl-dialog {
+  width: 400px !important;
+  max-width: 90%;
 }
 

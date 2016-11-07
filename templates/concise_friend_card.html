@@ -1,0 +1,10 @@
+<div class="concise-friend-card mdl-cell mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--4-col-phone">
+  <div class="mdl-card mdl-shadow--2dp">
+    <div class="entity-key" style="display: none;">{{ friend.key.urlsafe() }}</div>
+    <div class="mdl-card__supporting-text">
+      <h2 class="mdl-card__title-text"><span class="contact-nickname">{{ friend.nickname }}</span></h2>   
+      <div class="friend-phonenumber">{{ friend.phoneNumber }}</div>
+      <div class="friend-email">{{ friend.email }}</div>
+    </div>
+  </div>
+</div>

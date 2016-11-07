@@ -1,3 +1,4 @@
+
 {% extends "templates/base_page.html" %} {% block content %}
 {% block setActive %}
 <script>
@@ -5,38 +6,61 @@
 </script>
 {% endblock %}
 <div class="container">
-	<form class="form-horizontal" action="/edit_profile" method="post">
+	<form class="form-horizontal" action="/edit-profile" method="post">
 		<div class="form-group">
-			<label for="inputName" class="col-sm-2 control-label">Name</label>
+			<label for="inputName" class="col-sm-2 control-label">Name:</label>
+			<label for="inputName" class="col-sm-offset-3 col-sm-4 control-label info-label">{{ account_info.name }}</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="inputName" value="{{ current_user.name }}"
+				<input type="text" class="form-control info-div hidden" name="inputName" value="{{ account_info.name }}"
 					placeholder="Name">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="inputUsername" class="col-sm-2 control-label">Username</label>
+			<label for="inputNickname" class="col-sm-2 control-label">Nickname:</label>
+			<label for="inputNickname" class="col-sm-offset-3 col-sm-4 control-label info-label">{{ account_info.nickname }}</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="inputUsername" value="{{ current_user.username }}"
-					placeholder="Username">
+				<input type="text" class="form-control info-div hidden" name="inputNickname" value="{{ account_info.nickname }}"
+					placeholder="Nickname">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="inputEmail" class="col-sm-2 control-label">Email</label>
+			<label for="inputEmail" class="col-sm-2 control-label">Email:</label>
+			<label for="inputEmail" class="col-sm-offset-3 col-sm-4 control-label info-label">
+			{% if account_info.email %}
+				{{ account_info.email }}
+			{% else %}
+				EMAIL
+			{% endif %}
+			</label>
 			<div class="col-sm-8">
-				<input type="email" class="form-control" name="inputEmail" value="{{ current_user.email }}"
+				<input type="email" class="form-control info-div hidden" name="inputEmail" value="{{ account_info.email }}"
 					placeholder="Email">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="inputPhoneNumber" class="col-sm-2 control-label">Phone Number</label>
+			<label for="inputPhoneNumber" class="col-sm-2 control-label">Phone Number:</label>
+			<label for="inputPhoneNumber" class="col-sm-offset-3 col-sm-4 control-label info-label">
+			{% if account_info.phoneNumber %}
+				{{ account_info.phoneNumber }}
+			{% else %}
+				PHONE NUMBER
+			{% endif %}</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="inputPhoneNumber" value="{{ current_user.phoneNumber }}"
+				<input type="text" class="form-control info-div hidden" name="inputPhoneNumber" value="{{ account_info.phoneNumber }}"
 					placeholder="Phone Number">
 			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-sm-offset-5 col-sm-8">
-				<button type="submit" id="save-btn" class="btn btn-primary">Save</button>
+				<button type="button" id="edit-btn" class="btn btn-success">Edit</button>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-4">
+				<button type="button" id="cancel-btn" class="btn btn-danger hidden">Cancel</button>
+			</div>
+			<div class="col-sm-4">
+				<button type="submit" id="save-btn" class="btn btn-primary hidden">Save</button>
 			</div>
 		</div>
 	</form>

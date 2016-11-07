@@ -1,0 +1,107 @@
+{% extends "templates/base_page.html" %}
+
+{% block setActive %}
+<script>
+// Optional, highlight the Lists item (even though this is an individual list)
+$("a.mdl-layout__tab[href='/']").addClass("is-active");
+</script>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+  <form action="/update-group" method="POST">
+    <input name="group_name" type="hidden" value="{{ group.groupName }}">
+    <input name="group_description" type="hidden" value="{{ group.groupDescription }}">
+    <input name="group_entity_key" type="hidden" value="{{ group.key.urlsafe() }}">
+    <input name="user_key" type="hidden" value="{{ account_info.key.id() }}">
+    <input name="group_parent_key" type="hidden" value="{{ group.key.parent().id() }}">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-tablet">
+        <h2 class="page-title">
+          <span id="group-name">{{ group.groupName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {% if group.key.parent().id() == account_info.key.id() %}
+          <button type="button" id="edit-group-info-btn" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">edit</i>
+          </button>
+          <button type="button" id="delete-group-btn" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">delete</i>
+          </button>
+          {% endif %}
+        </h2>
+        <input name="group_keys_to_add" type="text" style="display: none;">
+        <input name="group_keys_to_remove" type="text" style="display: none;">
+      </div>
+      <div class="mdl-cell mdl-cell--4-col  mdl-cell--4-col-tablet group-buttons">
+        <button id="back-group-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          Back
+        </button>
+        {% if group.key.parent().id() == account_info.key.id() %}
+        <button id="save-group-btn" type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+          Save
+        </button>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+    <p id="group-description">{{ group.groupDescription }}</p>
+    <hr>
+    <h4>Friends that are <b>in</b> this group</h4>
+    <div class="friends-in-group">
+      <div class="mdl-grid">
+        {% for friend in friends_in_group %}
+          {% include "templates/concise_friend_card.html" %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+    <h4>Friends that are <b>NOT</b> in this  this group</h4>
+    <div class="friends-not-in-group">
+      <div class="mdl-grid">
+        {% for friend in friends_not_in_group %}
+          {% include "templates/concise_friend_card.html" %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <hr>
+{% endblock %}
+
+{% block modals %}
+<dialog id='edit-group-info-dialog' class="mdl-dialog">
+  <h4 class="mdl-dialog__title">Edit group name</h4>
+    <input name="group_entity_key" type="hidden" >
+    <div class="mdl-dialog__content">
+      <div id="name-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" name="groupName" value="{{ group.groupName }}">
+        <label class="mdl-textfield__label" for="groupName">Name</label>
+      </div>
+      <div id="name-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      	<input class="mdl-textfield__input" type="text" name="groupDescription" value="{{ group.groupDescription }}">
+        <label class="mdl-textfield__label" for="groupDescription">Description</label>
+      </div>
+      <p class="sidenote">Note, changes won't be saved unless you hit the page Save button</p>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button id="done-editing-group-info" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent close-parent-dialog">Done</button>
+    </div>
+</dialog>
+
+<dialog id='delete-group-dialog' class="mdl-dialog">
+  <h4 class="mdl-dialog__title">Delete Group</h4>
+  <form action="/delete-group" method="POST">
+    <input type="hidden" name="group_to_delete_key" value="{{group.key.urlsafe()}}">
+    <div class="mdl-dialog__content">
+      <p class="delete-modal-body">
+        Are you sure you wish to delete <b><span
+          id="delete-group-name">{{ group.groupName }}</span></b>?<br>
+      </p>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="submit" class="delete-btn mdl-button mdl-js-button mdl-button--raised">Delete group</button>
+      <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent close-parent-dialog">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+{% endblock %}
