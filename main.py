@@ -48,7 +48,10 @@ app = webapp2.WSGIApplication([
     ('/edit-profile', insert_handlers.ProfileAction),
     ('/insert-group', insert_handlers.AddGroupAction),
     ('/update-group', insert_handlers.UpdateGroupAction),
+<<<<<<< HEAD
     ('/finish-group', insert_handlers.FinishGroupAction),
+=======
+>>>>>>> master
     ('/insert-event', insert_handlers.AddEventAction),
     ('/update-event', insert_handlers.UpdateEventAction),
     

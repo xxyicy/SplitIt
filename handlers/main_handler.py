@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 from google.appengine.ext import ndb
 
 import facebook
+=======
+
+import facebook
+from google.appengine.ext import ndb
+>>>>>>> master
 from handlers.base_handlers import BaseHandler, FACEBOOK_APP_ID, BasePage, \
     FACEBOOK_APP_SECRET
 from models import Group
@@ -74,19 +80,36 @@ class GroupDetailHandler(BasePage):
     def update_values(self, user, values):
         group = ndb.Key(urlsafe=self.request.get('group_key')).get()
         friends = friends_utils.get_friends_list_from_user(user)
+<<<<<<< HEAD
         
         values["group"] = group
         values["friends_in_group"] = group_utils.get_friends_in_group(friends, group)
         values["friends_not_in_group"] = group_utils.get_friends_not_in_group(friends, group)
+=======
+        friends_in_group = []
+        friends_not_in_group = []
+        for friend in friends:
+          if friend.key in group.members:
+            friends_in_group.append(friend)
+          else:
+            friends_not_in_group.append(friend)
+        values["group"] = group
+        values["friends_in_group"] = friends_in_group
+        values["friends_not_in_group"] = friends_not_in_group
+>>>>>>> master
     
         
 class EventsHandler(BasePage):
     def get_template(self):
+<<<<<<< HEAD
         group = ndb.Key(urlsafe=self.request.get('group_key')).get()
         if group.finished:
             return "templates/finished_group.html"
         else:
             return "templates/events.html"
+=======
+        return "templates/events.html"
+>>>>>>> master
         
     def update_values(self, user, values):
         group = ndb.Key(urlsafe=self.request.get('group_key')).get()
@@ -110,15 +133,19 @@ class EventsHandler(BasePage):
         values["events"] = events
         values["event_member_map"] = event_member_map
         
+<<<<<<< HEAD
         values["friends_in_group"] = group_utils.get_members(user, group)
         values["length"] = len(values["friends_in_group"])
         
+=======
+>>>>>>> master
         
 class EventDetailHandler(BasePage):
     def get_template(self):
         return "templates/event.html"
         
     def update_values(self, user, values):
+<<<<<<< HEAD
         event = ndb.Key(urlsafe=self.request.get('event_key')).get()
         group = ndb.Key(urlsafe=self.request.get('group_key')).get()
         friends = group_utils.get_members_exclude_user(user,group)
@@ -126,3 +153,26 @@ class EventDetailHandler(BasePage):
         values["event"] = event
         values["friends_in_event"] = event_utils.get_friends_in_event(friends, event)
         values["friends_not_in_event"] = event_utils.get_friends_not_in_event(friends, event)
+=======
+        userInfo = user_utils.get_account_info(user)
+        event = ndb.Key(urlsafe=self.request.get('event_key')).get()
+        group = ndb.Key(urlsafe=self.request.get('group_key')).get()
+        friends = group_utils.get_members_exclude_user(user,group)
+        friends_in_event = []
+        friends_not_in_event = []
+        for friend in friends:
+          if friend.key in event.members:
+            friends_in_event.append(friend)
+          else:
+            friends_not_in_event.append(friend)
+            
+        expenses=[]
+        for expense in event.expenses:
+            expenses.append(expense.get())
+            
+        values["event"] = event
+        values["user"] = userInfo
+        values["expenses"] = expenses
+        values["friends_in_event"] = friends_in_event
+        values["friends_not_in_event"] = friends_not_in_event
+>>>>>>> master

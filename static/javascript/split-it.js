@@ -43,7 +43,10 @@ rh.splitit.profilePageInit = function() {
 		$("#save-btn").addClass("hidden");
 		$("#edit-btn").removeClass("hidden");
 	})
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 }
 
 rh.splitit.groupsPageInit = function() {
@@ -90,9 +93,15 @@ rh.splitit.groupPageInit = function() {
 		  window.location.replace("/events?group_key=" + groupKey);
 	  })
 	  
+<<<<<<< HEAD
 	$(".concise-friend-card").click(function() {
 		var finished = $("input[group_finished]").val()
 		if ($("input[name=user_key]").val() === $("input[name=group_parent_key]").val() && !finished){
+=======
+	
+	$(".concise-friend-card").click(function() {
+		if ($("input[name=user_key]").val() === $("input[name=group_parent_key]").val()){
+>>>>>>> master
 			$elem = $(this);
 			var isInListBeforeClick = $elem.parents(".friends-in-group").length > 0;
 			var hasMovedClass = $elem.hasClass("moved-contact");
@@ -123,7 +132,10 @@ rh.splitit.groupPageInit = function() {
 	});
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 rh.splitit.eventsPageInit = function() {
 	// Insert Event - Create
 	$("#add-event-btn").click(function() {
@@ -148,6 +160,7 @@ rh.splitit.eventsPageInit = function() {
 		window.location.replace("/event?event_key=" + eventKey +"&group_key="+groupKey);
 	});
 	
+<<<<<<< HEAD
 	 $("#finish-group-btn").click(function() {
 		  var groupKey = $("input[name=group_entity_key]").val();
 		  window.location.replace("/finish-group?group_key=" + groupKey);
@@ -156,6 +169,204 @@ rh.splitit.eventsPageInit = function() {
 
 rh.splitit.eventPageInit = function() {
 	
+=======
+	$(".event-edit-btn").click(function() {
+		var eventKey = $(".event-card").find(".entity-key").html();
+		var groupKey = $("input[name=group_entity_key]").val();
+		
+		window.location.replace("/event?event_key=" + eventKey +"&group_key="+groupKey);
+	});
+	
+	$(".go-back-to-events-btn").click(function(){
+		var groupKey = $("input[name='group_key']").val();
+		
+		window.location.replace("/events?group_key=" + groupKey);
+	})
+};
+
+rh.splitit.eventPageInit = function() {
+	// Edit list name
+	  $("#edit-event-info-btn").click(function() {
+	    document.querySelector('#edit-event-info-dialog').showModal();
+	  });
+	  // Close the list rename modal and update the page title.
+	  $("#done-editing-event-info").click(function() {
+	    var name = $("input[name=eventName]").val();
+	    var description = $("input[name=eventDescription").val();
+	    var cost = $("input[name=eventTotalCost").val();
+	    $("#event-name").text(name);
+	    $("#event-description").text(description);
+	    $("#event-totalCost").text(cost);
+	    $("input[name=event_name]").val(name);
+	    $("input[name=event_description").val(description);
+	    $("input[name=event_totalCost").val(cost);
+	  });
+	  
+	  // Related to Deleting a List
+	  $("#delete-event-btn").click(function() {
+	    document.querySelector("#delete-event-dialog").showModal();
+	  });
+	  
+	  $("#back-event-btn").click(function() {
+		  var groupKey = $("input[name=event_entity_key]").val();
+		  window.location.replace("/events?group_key=" + groupKey);
+	  })
+	  
+	
+	$(".concise-friend-card").click(function() {
+		if ($("input[name=user_key]").val() === $("input[name=event_parent_key]").val()){
+			$elem = $(this);
+			var isInListBeforeClick = $elem.parents(".friends-in-event").length > 0;
+			var hasMovedClass = $elem.hasClass("moved-contact");
+			var entityKey = $(this).find(".entity-key").html();
+			eventKeysToAddString = $("input[name=event_keys_to_add]").val();
+			eventKeysToRemoveString = $("input[name=event_keys_to_remove]").val();
+	
+			$elem.detach();
+			var userInfo = {
+					key: $elem.find(".entity-key").html(),
+					nickname: $elem.find(".contact-nickname").html(),
+					phoneNumber: $elem.find(".friend-phonenumber").html(),
+					email: $elem.find(".friend-email").html()
+				};
+			if (isInListBeforeClick && hasMovedClass) {
+				$elem.appendTo(".friends-not-in-event > .mdl-grid").removeClass("moved-contact");
+				eventKeysToAddString = rh.splitit.toggleStringInList(eventKeysToAddString,entityKey);
+				$('#tr'+userInfo.key).addClass("hide");
+			} else if (isInListBeforeClick && !hasMovedClass) {
+				$elem.appendTo(".friends-not-in-event > .mdl-grid").addClass("moved-contact");
+				eventKeysToRemoveString = rh.splitit.toggleStringInList(eventKeysToRemoveString,entityKey);
+				$('#tr'+userInfo.key).addClass("hide");
+			} else if (!isInListBeforeClick && hasMovedClass) {
+				$elem.appendTo(".friends-in-event > .mdl-grid").removeClass("moved-contact");
+				eventKeysToRemoveString = rh.splitit.toggleStringInList(eventKeysToRemoveString,entityKey);
+				$('#tr'+userInfo.key).removeClass("hide");
+			} else if (!isInListBeforeClick && !hasMovedClass) {
+				$elem.appendTo(".friends-in-event > .mdl-grid").addClass("moved-contact");
+				eventKeysToAddString = rh.splitit.toggleStringInList(eventKeysToAddString,entityKey);
+				$('#tr'+userInfo.key).removeClass("hide");
+			}
+			$("input[name=event_keys_to_add]").val(eventKeysToAddString);
+			$("input[name=event_keys_to_remove]").val(eventKeysToRemoveString);
+			
+		}else {
+			console.log($("input[name=user_key]").val())
+			console.log($("input[name=event_parent_key]").val())
+		}
+	});
+	  
+	  $("#split-event-btn").click(function(){
+		  var totalCost = parseFloat($("#event-totalCost").text())
+		  var elements = $("tr[class$='exp-tr']");
+		  elements.each(function() {
+			  var text = $(this).find("#cost").html();
+			  var cost = parseFloat(text);
+			  if (!cost && cost!= 0) {
+				  alert("Please enter correct number!");
+				  return;
+			  }
+			  totalCost-=cost;
+		  });
+		  var elements2 = $("tr[class$='exp-tr is-selected'] ");
+		  elements2.each(function() {
+			  $(this).find("#cost").html(totalCost/elements2.length);
+		  });
+		  
+	  })
+	  
+	  $("#clear-expenses-btn").click(function(){
+		  var elements = $("tr");
+		  elements.each(function() {
+			  $(this).find("#cost").html("0.0");
+		  });
+	  })
+	  
+	  
+	  $("#save-event-btn").click(function(){
+		  var event_name = $('input[name="event_name"').val();
+		  var event_description = $('input[name="event_description"]').val();
+		  var event_totalCost = $('input[name="event_totalCost"]').val();
+		  var urlsafe_entity_key = $('input[name="event_entity_key"]').val();
+		  var urlsafe_event_keys_to_add = $('input[name="event_keys_to_add"]').val();
+		  var urlsafe_event_keys_to_remove = $('input[name="event_keys_to_remove"]').val();
+		  
+		  var eventCost = parseFloat($("#event-totalCost").text());
+		  var totalCost = eventCost;
+		  var expenses = [];
+		  var elements = $("tr[class$='exp-tr']");
+		  elements.each(function() {
+			  var text = $(this).find("#cost").html();
+			  var cost = parseFloat(text);
+			  if (!cost && cost!= 0) {
+				  alert("Please enter correct number on expenses table!");
+				  return;
+			  }
+			  var expense_key = $(this).find("#cost").attr("class");
+			  var elemID = $(this).attr("id")
+			  var person_key = elemID.substring(2, elemID.length);
+			  var expense = {
+					expense_key: expense_key,
+					person_key: person_key,
+					cost: cost
+			  		}
+			  expenses.push(expense);
+			  totalCost-=cost;
+		  });
+		  var elements2 = $("tr[class$='exp-tr is-selected']");
+		  elements2.each(function() {
+			  var text = $(this).find("#cost").html();
+			  var cost = parseFloat(text);
+			  if (!cost && cost!= 0) {
+				  alert("Please enter correct number expenses table!");
+				  return;
+			  }
+			  var expense_key = $(this).find("#cost").attr("class");
+			  var elemID = $(this).attr("id")
+			  var person_key = elemID.substring(2, elemID.length);
+			  var expense = {
+					expense_key: expense_key,
+					person_key: person_key,
+					cost: cost  
+			  		}
+			  expenses.push(expense);
+			  totalCost-=cost;
+		  });
+		  
+		  console.log(totalCost);
+		  if (totalCost < -0.00001 || totalCost > 0.00001){
+			  alert("Expenses are not equal to total cost!");
+			  return;
+		  }
+		  
+		  var data = {
+				event_name: event_name,
+				event_description: event_description,
+				event_totalCost: event_totalCost,
+				event_entity_key: urlsafe_entity_key,
+				event_keys_to_add: urlsafe_event_keys_to_add,
+				event_keys_to_remove: urlsafe_event_keys_to_remove,
+				expenses: JSON.stringify(expenses)
+		  }
+		  console.log(data);
+		  $.ajax({
+              url: "/update-event",
+              type: 'POST',
+              data: data,
+              dataType: 'JSON',
+              success: function (data) {
+            	  if (!data){
+            		  return
+            	  }
+            	  console.log(data);
+                  window.location.reload();
+              },
+              error: function (request, status, error) {
+                  console.log(error);
+              }
+          });
+		  
+	  })
+>>>>>>> master
 }
 
 /* Helper methods */

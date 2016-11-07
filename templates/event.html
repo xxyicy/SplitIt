@@ -9,32 +9,67 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
 
 {% block content %}
   <div class="container">
+<<<<<<< HEAD
   <form action="/update-event" method="POST">
     <input name="event_name" type="hidden" value="{{ event.eventName }}">
     <input name="event_description" type="hidden" value="{{ event.eventDescription }}">
     <input name="event_entity_key" type="hidden" value="{{ event.key.urlsafe() }}">
+=======
+  <form>
+    <input name="event_name" type="hidden" value="{{ event.eventName }}">
+    <input name="event_description" type="hidden" value="{{ event.eventDescription }}">
+    <input name="event_totalCost" type="hidden" value="{{ event.totalCost }}">
+    <input name="event_entity_key" type="hidden" value="{{ event.key.urlsafe() }}">
+    <input name="user_key" type="hidden" value="{{ account_info.key.id() }}">
+    <input name="event_parent_key" type="hidden" value="{{ event.key.parent().id() }}">
+    <input name="group_key" type="hidden" value="{{ event.group_key }}">
+>>>>>>> master
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-tablet">
         <h2 class="page-title">
           <span id="event-name">{{ event.eventName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<<<<<<< HEAD
+=======
+          {% if user.key.urlsafe() == event.payer.urlsafe() %}
+>>>>>>> master
           <button type="button" id="edit-event-info-btn" class="mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">edit</i>
           </button>
           <button type="button" id="delete-event-btn" class="mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">delete</i>
           </button>
+<<<<<<< HEAD
+=======
+          {% endif %}
+>>>>>>> master
         </h2>
         <input name="event_keys_to_add" type="text" style="display: none;">
         <input name="event_keys_to_remove" type="text" style="display: none;">
       </div>
       <div class="mdl-cell mdl-cell--4-col  mdl-cell--4-col-tablet event-buttons">
+<<<<<<< HEAD
         <button id="save-event-btn" type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
           Save
         </button>
+=======
+        <button type="button" class="go-back-to-events-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+	          Back to all Events
+	    </button>
+	    {% if user.key.urlsafe() == event.payer.urlsafe() %}
+        <button id="save-event-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+          Save
+        </button>
+        {% endif %}
+>>>>>>> master
       </div>
     </div>
   </form>
     <p id="event-description">{{ event.eventDescription }}</p>
+<<<<<<< HEAD
+=======
+    <p>{{event.payer.get().name}}&nbsp;&nbsp;paied&nbsp;&nbsp;$<span id="event-totalCost">{{ event.totalCost }}</span></p>
+    {% if user.key.urlsafe() == event.payer.urlsafe() %}
+>>>>>>> master
     <hr>
     <h4>Friends that are <b>in</b> this event</h4>
     <div class="friends-in-event">
@@ -54,9 +89,71 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
         {% endfor %}
       </div>
     </div>
+<<<<<<< HEAD
   </div>
   <hr>
 
+=======
+    {% endif %}
+    <hr>
+    {% if user.key.urlsafe() == event.payer.urlsafe() %}
+    <div class="mdl-cell mdl-cell--4-col  mdl-cell--4-col-tablet">
+    <button id="split-event-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+    	Split It Evenly
+    </button>
+    <button id="clear-expenses-btn" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+	   	Clear Expenses
+	</button>
+    </div>
+    {% endif %}
+    <div class="expenses-table">
+    	{% if user.key.urlsafe() == event.payer.urlsafe() %}
+    	<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+    	{% else %}
+    	<table class="mdl-data-table mdl-js-data-table">
+    	{% endif %}
+  			<thead>
+    			<tr>
+      				<th class="mdl-data-table__cell--non-numeric">Name</th>
+      				<th>Expense($)</th>
+      				<th>Phone Number</th>
+      				<th>Email</th>
+    			</tr>
+  			</thead>
+ 			 <tbody>
+  				{% for expense in expenses %}
+  					{% if user.key.urlsafe() == event.payer.urlsafe() %}
+  					<tr id="tr{{ expense.person.urlsafe() }}" class="exp-tr">		 			
+      					<td class="mdl-data-table__cell--non-numeric">{{ expense.person.get().name }}</td>
+      					<td id="cost" class="{{ expense.key.urlsafe() }}" contenteditable='true'>{{ expense.cost }}</td>
+      					<td>{{ expense.person.get().phoneNumber }}</td>
+     					<td>{{ expense.person.get().email }}</td>
+   				 	</tr>
+   				 	{% else %}
+   				 	<tr id="tr{{ expense.person.urlsafe() }}" class="exp-tr">		 			
+      					<td class="mdl-data-table__cell--non-numeric">{{ expense.person.get().name }}</td>
+      					<td id="cost" class="{{ expense.key.urlsafe() }}">{{ expense.cost }}</td>
+      					<td>{{ expense.person.get().phoneNumber }}</td>
+     					<td>{{ expense.person.get().email }}</td>
+   				 	</tr>
+   				 	{% endif %}
+    			{% endfor %}
+     			{% for friend in friends_not_in_event %}
+  					<tr id="tr{{ friend.key.urlsafe() }}" class="exp-tr hide">		 			
+      					<td class="mdl-data-table__cell--non-numeric">{{ friend.name }}</td>
+      					<td id="cost" class="none" contenteditable='true'>0.0</td>
+      					<td>{{ friend.phoneNumber }}</td>
+     					<td>{{ friend.email }}</td>
+   				 	</tr>
+    			{% endfor %} 
+  			</tbody>
+		</table>
+    </div>
+  </div>
+  <hr>
+
+
+>>>>>>> master
 {% endblock %}
 
 {% block modals %}
@@ -72,6 +169,13 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
       	<input class="mdl-textfield__input" type="text" name="eventDescription" value="{{ event.eventDescription }}">
         <label class="mdl-textfield__label" for="eventDescription">Description</label>
       </div>
+<<<<<<< HEAD
+=======
+      <div id="total-cost-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      	<input class="mdl-textfield__input" type="number" name="eventTotalCost" value="{{ event.totalCost }}">
+        <label class="mdl-textfield__label" for="eventTotalCost">Total Cost</label>
+      </div>
+>>>>>>> master
       <p class="sidenote">Note, changes won't be saved unless you hit the page Save button</p>
     </div>
     <div class="mdl-dialog__actions">

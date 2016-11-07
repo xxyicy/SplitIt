@@ -17,6 +17,7 @@ def get_members_exclude_user(user,group):
     for member_key in group.members:
         if member_key != account_info.key:
             members.append(member_key.get())
+<<<<<<< HEAD
     return members;
 
 def get_members(user, group):
@@ -48,3 +49,6 @@ def get_expenses_for_user(user, group):
 #     for event in events:
 #         if user.key.urlsafe() != event.
     return expense_map
+=======
+    return members;
+>>>>>>> master
