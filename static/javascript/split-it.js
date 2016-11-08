@@ -335,6 +335,7 @@ rh.splitit.eventPageInit = function() {
 				expenses: JSON.stringify(expenses)
 		  }
 		  console.log(data);
+		  var groupKey = $('input[name="group_key"]').val()
 		  $.ajax({
               url: "/update-event",
               type: 'POST',
@@ -345,7 +346,7 @@ rh.splitit.eventPageInit = function() {
             		  return
             	  }
             	  console.log(data);
-                  window.location.reload();
+                  window.location.replace("/events?group_key=" + groupKey)
               },
               error: function (request, status, error) {
                   console.log(error);
