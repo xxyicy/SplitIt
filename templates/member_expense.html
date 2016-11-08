@@ -24,7 +24,7 @@
 	<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 		<thead>
 			<tr>
-				<th class="mdl-data-table__cell--non-numeric">Name</th>
+				<th>Name</th>
 				<th>Get Back Expense($)</th>
 				<th>Owe Expense($)</th>
 				<th>Net Expense($)</th>
@@ -35,7 +35,7 @@
 		<tbody>  
 			{% for member in members %} 
 			<tr class="exp-tr">
-				<td class="mdl-data-table__cell--non-numeric">{{
+				<td>{{
 					member.name }}</td>
 				{% if member.key.urlsafe() in expense_to_user_member_map %}
 					<td>{{ expense_to_user_member_map[member.key.urlsafe()] }}</td>
