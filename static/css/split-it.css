@@ -10,7 +10,7 @@
 	float: right
 }
 
-@media ( min-width : 1200px) {
+/* @media ( min-width : 1200px) {
 	.container:not (.fluid ), .mdl-grid:not (.fluid ) {
 		width: 1152px;
 	}
@@ -19,7 +19,7 @@
 		left: 50%;
 		margin-left: -576px;
 	}
-}
+} */
 
 /* Cards copy paste from Square card https://getmdl.io/components/index.html#cards-section */
 .mdl-card__title {
@@ -74,4 +74,5 @@ dialog.mdl-dialog {
   width: 400px !important;
   max-width: 90%;
 }
+
 

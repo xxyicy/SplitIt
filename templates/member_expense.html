@@ -21,49 +21,50 @@
       </div>
     </div>
 	
-	<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Get Back Expense($)</th>
-				<th>Owe Expense($)</th>
-				<th>Net Expense($)</th>
-				<th>Phone Number</th>
-				<th>Email</th>
-			</tr>
-		</thead>
-		<tbody>  
-			{% for member in members %} 
-			<tr class="exp-tr">
-				<td>{{
-					member.name }}</td>
-				{% if member.key.urlsafe() in expense_to_user_member_map %}
-					<td>{{ expense_to_user_member_map[member.key.urlsafe()] }}</td>
-					{% if member.key.urlsafe() in expense_from_user_member_map %}
-						<td> {{ expense_from_user_member_map[member.key.urlsafe()] }} </td>
-						<td> {{ expense_to_user_member_map[member.key.urlsafe()] - expense_from_user_member_map[member.key.urlsafe()] }} </td>
+	<div class="table-responsive">
+		<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Get Back($)</th>
+					<th>Owe($)</th>
+					<th>Net Expense($)</th>
+					<th>Phone Number</th>
+					<th>Email</th>
+				</tr>
+			</thead>
+			<tbody>  
+				{% for member in members %} 
+				<tr class="exp-tr">
+					<td>{{ member.name }}</td>
+					{% if member.key.urlsafe() in expense_to_user_member_map %}
+						<td>{{ expense_to_user_member_map[member.key.urlsafe()] }}</td>
+						{% if member.key.urlsafe() in expense_from_user_member_map %}
+							<td> {{ expense_from_user_member_map[member.key.urlsafe()] }} </td>
+							<td> {{ expense_to_user_member_map[member.key.urlsafe()] - expense_from_user_member_map[member.key.urlsafe()] }} </td>
+						{% else %}
+							<td> 0.00 </td>
+							<td> {{ expense_to_user_member_map[member.key.urlsafe()] }} </td>
+						{% endif %}
 					{% else %}
 						<td> 0.00 </td>
-						<td> {{ expense_to_user_member_map[member.key.urlsafe()] }} </td>
+						{% if member.key.urlsafe() in expense_from_user_member_map %}
+							<td> {{ expense_from_user_member_map[member.key.urlsafe()] }} </td>
+							<td> {{ -expense_from_user_member_map[member.key.urlsafe()] }} </td> 
+						{% else %}
+							<td> 0.00 </td>
+							<td> 0.00 </td>
+						{% endif %}
 					{% endif %}
-				{% else %}
-					<td> 0.00 </td>
-					{% if member.key.urlsafe() in expense_from_user_member_map %}
-						<td> {{ expense_from_user_member_map[member.key.urlsafe()] }} </td>
-						<td> {{ -expense_from_user_member_map[member.key.urlsafe()] }} </td> 
-					{% else %}
-						<td> 0.00 </td>
-						<td> 0.00 </td>
-					{% endif %}
-				{% endif %}
-
-				<td>{{ member.phoneNumber }}</td>
-				<td>{{ member.email }}</td>
-			</tr>
-			{% endfor %} 
-			
-		</tbody>
-	</table>
+	
+					<td>{{ member.phoneNumber }}</td>
+					<td>{{ member.email }}</td>
+				</tr>
+				{% endfor %} 
+				
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <hr>

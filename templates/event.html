@@ -90,11 +90,12 @@ $("a.mdl-layout__tab[href='/']").addClass("is-active");
 	</button>
     </div>
     {% endif %}
-    <div class="expenses-table">
+    
+    <div class="expenses-table table-responsive">
     	{% if user.key.urlsafe() == event.payer.urlsafe() %}
-    	<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+    	<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
     	{% else %}
-    	<table class="mdl-data-table mdl-js-data-table">
+    	<table class="mdl-data-table mdl-js-data-table table">
     	{% endif %}
   			<thead>
     			<tr>
