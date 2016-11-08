@@ -22,10 +22,11 @@
 				Back to all Groups </a>
 		</div>
 	</div>
-	
+	<p> Click friends card to see expense details with them </p>
 	<p id="group-description">{{ group.groupDescription }} -- Finished on {{ group.finishDate }}</p>
     <p>Members that are in this group: {{ length }} members</p> 
    	<input name="group_finished" type="hidden" value="{{ group.finished }}">
+   	<input name="group_entity_key" type="hidden" value="{{ group.key.urlsafe() }}">
     <div class="friends-in-group">
       <div class="mdl-grid">
         {% for friend in friends_in_group %}
@@ -35,7 +36,5 @@
     </div>
 </div>
 
-<hr>
 {% endblock %} 
 
-{% block modals %} {% endblock %}

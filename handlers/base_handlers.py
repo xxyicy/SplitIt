@@ -12,6 +12,8 @@ FACEBOOK_APP_SECRET = "6e9760b0cc49fd736a9b36998aad064e"  # your own FB app secr
 INVITATION_TEXT = "I invite you to try my app. It is amazing!"
 
 
+
+
 class BaseHandler(webapp2.RequestHandler):
   """Page handlers should inherit from this one."""
   def get(self):

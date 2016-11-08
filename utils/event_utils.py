@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-=======
 from models import Expense
 from utils import user_utils
 
-
->>>>>>> master
 def get_events_from_group(user, group):
     events_in_group = []
     friends = []
@@ -13,7 +9,7 @@ def get_events_from_group(user, group):
         events_in_group.append(event_in_group)
     return events_in_group
 
-<<<<<<< HEAD
+
 def get_friends_in_event(friends, event):
     friends_in_event = []
     for friend in friends:
@@ -27,10 +23,7 @@ def get_friends_not_in_event(friends, event):
       if friend.key not in event.members:
         friends_not_in_event.append(friend)
     return friends_not_in_event
-
-def get_expenses(event):
     
-=======
 def delete_user_expense_from_event(user, event):
     expense_keys = event.expenses
     for expense_key in expense_keys:
@@ -51,4 +44,11 @@ def add_user_expense_to_event(user, event, expenses):
     
     event.expenses.append(exp.key)
     event.put()
->>>>>>> master
+    
+def get_expenses(event):
+    event_expense_member_map = {}
+    for expense_key in event.expenses:
+        expense = expense_key.get()
+        event_expense_member_map[expense.person.urlsafe()] = expense.cost
+    return event_expense_member_map
+

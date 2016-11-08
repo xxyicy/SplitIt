@@ -1,9 +1,5 @@
 application: yangh1-xiaox-split-it
-<<<<<<< HEAD
 version: 1
-=======
-version: 2
->>>>>>> master
 runtime: python27
 api_version: 1
 threadsafe: yes

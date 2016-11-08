@@ -1,19 +1,13 @@
-<<<<<<< HEAD
-from google.appengine.ext import ndb
 
-from handlers.base_handlers import BaseAction
-from models import Group, Event
-from utils import user_utils, friends_utils
 import datetime
-=======
 import json
 
 from google.appengine.ext import ndb
+
 from handlers.base_handlers import BaseAction
 from models import Group, Event
 from utils import user_utils, friends_utils, event_utils
 
->>>>>>> master
 
 class ProfileAction(BaseAction):
     def handle_post(self, user):
@@ -68,7 +62,6 @@ class UpdateGroupAction(BaseAction):
 
     self.redirect("/events?group_key=" + group.key.urlsafe())
     
-<<<<<<< HEAD
 class FinishGroupAction(BaseAction):
     def handle_post(self, user):
         group_key = self.request.get("group_key")
@@ -81,12 +74,6 @@ class FinishGroupAction(BaseAction):
     
 class AddEventAction(BaseAction):
     def handle_post(self, user):
-        new_event = Event(parent=user_utils.get_parent_key(user),
-                      eventName=self.request.get("eventName"),
-                      eventDescription=self.request.get("eventDescription"))
-=======
-class AddEventAction(BaseAction):
-    def handle_post(self, user):
         userInfo = user_utils.get_account_info(user)
         event_totalCost = self.request.get("eventTotalCost")
         if not event_totalCost:
@@ -97,7 +84,6 @@ class AddEventAction(BaseAction):
                       payer=userInfo.key,
                       totalCost=float(event_totalCost),
                       group_key=self.request.get("group_entity_key"))
->>>>>>> master
         new_event.put()
         
         group_key = ndb.Key(urlsafe=self.request.get("group_entity_key"))
@@ -110,11 +96,6 @@ class AddEventAction(BaseAction):
         
 class UpdateEventAction(BaseAction):
   def handle_post(self, user):
-<<<<<<< HEAD
-    # TODO: update event from db and get group_key     
-    group_key = ""
-    self.redirect("/events?group_key=" + group_key)
-=======
     # TODO: update event from db and get group_key
 #     blob = self.request.get('json')
 #     data = json.loads(self.request.body)  
@@ -173,5 +154,4 @@ class UpdateEventAction(BaseAction):
                 "event_keys_to_remove": urlsafe_event_keys_to_remove,
                 "expenses": expenses}
     self.response.out.write(json.dumps(obj))
->>>>>>> master
         

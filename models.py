@@ -10,42 +10,29 @@ class User(ndb.Model):
     avatarUrl = ndb.StringProperty(default="")
     phoneNumber = ndb.StringProperty(default="")
     friendList = ndb.KeyProperty(kind='User',repeated=True)
-<<<<<<< HEAD
-=======
 
 class Expense(ndb.Model):
     person = ndb.KeyProperty(kind=User)
     cost = ndb.FloatProperty()
     to = ndb.KeyProperty(kind=User)
->>>>>>> master
     
 class Event(ndb.Model):
     eventName = ndb.StringProperty()
     eventDescription = ndb.StringProperty()
-<<<<<<< HEAD
-    members = ndb.KeyProperty(kind=User,repeated=True)
-    expenses = ndb.IntegerProperty()
-=======
     totalCost = ndb.FloatProperty()
     payer = ndb.KeyProperty(kind=User)
     members = ndb.KeyProperty(kind=User,repeated=True)
     expenses = ndb.KeyProperty(kind=Expense,repeated=True)
     group_key = ndb.StringProperty()
->>>>>>> master
     
 class Group(ndb.Model):
     groupName = ndb.StringProperty()
     groupDescription = ndb.StringProperty()
     members = ndb.KeyProperty(kind=User,repeated=True)
     events = ndb.KeyProperty(kind=Event,repeated=True)
-    expenses = ndb.IntegerProperty(repeated=True)
     finished = ndb.BooleanProperty(default=False)
     finishDate = ndb.DateProperty()
-    
-<<<<<<< HEAD
 
-=======
->>>>>>> master
     
 
     

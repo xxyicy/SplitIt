@@ -43,10 +43,6 @@ rh.splitit.profilePageInit = function() {
 		$("#save-btn").addClass("hidden");
 		$("#edit-btn").removeClass("hidden");
 	})
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 }
 
 rh.splitit.groupsPageInit = function() {
@@ -93,19 +89,17 @@ rh.splitit.groupPageInit = function() {
 		  window.location.replace("/events?group_key=" + groupKey);
 	  })
 	  
-<<<<<<< HEAD
 	$(".concise-friend-card").click(function() {
-		var finished = $("input[group_finished]").val()
-		if ($("input[name=user_key]").val() === $("input[name=group_parent_key]").val() && !finished){
-=======
-	
-	$(".concise-friend-card").click(function() {
-		if ($("input[name=user_key]").val() === $("input[name=group_parent_key]").val()){
->>>>>>> master
+		var finished = $("input[name=group_finished]").val();
+		var entityKey = $(this).find(".entity-key").html();
+		if (finished){
+			var groupKey = $("input[name=group_entity_key]").val();
+			console.log(groupKey)
+			window.location.replace("/group/user_expense?user_key="+entityKey+"&group_key="+groupKey)
+		}else if ($("input[name=user_key]").val() === $("input[name=group_parent_key]").val()){
 			$elem = $(this);
 			var isInListBeforeClick = $elem.parents(".friends-in-group").length > 0;
 			var hasMovedClass = $elem.hasClass("moved-contact");
-			var entityKey = $(this).find(".entity-key").html();
 			groupKeysToAddString = $("input[name=group_keys_to_add]").val();
 			groupKeysToRemoveString = $("input[name=group_keys_to_remove]").val();
 	
@@ -132,10 +126,6 @@ rh.splitit.groupPageInit = function() {
 	});
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 rh.splitit.eventsPageInit = function() {
 	// Insert Event - Create
 	$("#add-event-btn").click(function() {
@@ -160,16 +150,6 @@ rh.splitit.eventsPageInit = function() {
 		window.location.replace("/event?event_key=" + eventKey +"&group_key="+groupKey);
 	});
 	
-<<<<<<< HEAD
-	 $("#finish-group-btn").click(function() {
-		  var groupKey = $("input[name=group_entity_key]").val();
-		  window.location.replace("/finish-group?group_key=" + groupKey);
-	  })
-};
-
-rh.splitit.eventPageInit = function() {
-	
-=======
 	$(".event-edit-btn").click(function() {
 		var eventKey = $(".event-card").find(".entity-key").html();
 		var groupKey = $("input[name=group_entity_key]").val();
@@ -182,6 +162,13 @@ rh.splitit.eventPageInit = function() {
 		
 		window.location.replace("/events?group_key=" + groupKey);
 	})
+	
+	$("#finish-group-btn").click(function(){
+		var groupKey = $("input[name='group_entity_key']").val();
+		console.log(groupKey)
+		window.location.replace("/finish-group?group_key="+groupKey)
+	})
+	
 };
 
 rh.splitit.eventPageInit = function() {
@@ -366,7 +353,7 @@ rh.splitit.eventPageInit = function() {
           });
 		  
 	  })
->>>>>>> master
+
 }
 
 /* Helper methods */

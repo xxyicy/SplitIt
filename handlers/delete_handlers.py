@@ -12,10 +12,7 @@ class DeleteGroupAction(BaseAction):
     
 class DeleteEventAction(BaseAction):
     def handle_post(self, user):
-<<<<<<< HEAD
-        # TODO: delete from db and get group_key     
-        group_key = ""
-=======
+
         event_key = ndb.Key(urlsafe=self.request.get("event_to_delete_key"))
         event = event_key.get()
         group_key = event.group_key
@@ -24,5 +21,5 @@ class DeleteEventAction(BaseAction):
         group.events.remove(event_key)
         group.put()
         event_key.delete()
->>>>>>> master
+
         self.redirect("/events?group_key=" + group_key)

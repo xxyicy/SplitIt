@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 import os
 
 import jinja2
@@ -25,6 +26,7 @@ from handlers import main_handler, insert_handlers, delete_handlers
 
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
                                autoescape=True)
+
 # 
 # class MainHandler(webapp2.RequestHandler):
 #     def get(self):
@@ -44,14 +46,12 @@ app = webapp2.WSGIApplication([
     ('/group', main_handler.GroupDetailHandler),
     ('/events', main_handler.EventsHandler),
     ('/event', main_handler.EventDetailHandler),
+    ('/group/user_expense', main_handler.UserExpenseHandler),
     
     ('/edit-profile', insert_handlers.ProfileAction),
     ('/insert-group', insert_handlers.AddGroupAction),
     ('/update-group', insert_handlers.UpdateGroupAction),
-<<<<<<< HEAD
     ('/finish-group', insert_handlers.FinishGroupAction),
-=======
->>>>>>> master
     ('/insert-event', insert_handlers.AddEventAction),
     ('/update-event', insert_handlers.UpdateEventAction),
     
